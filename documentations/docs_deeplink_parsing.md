@@ -62,6 +62,8 @@ This function is designed as same as `parsing_coin_deeplink()`, except it only h
 one parsing template.
 
 # Error Log mechanism
+
+![error_log](https://github.com/yhao21/ECON498_midterm/blob/master/pic/error_log.png)
 As discussed above, the website may not contain the require data for particular 
 currency at this time. If so, `save_to_log()` will be invoked. This function trace
 back to `500deeplinks.csv`, find the name of currency that is as same as the one

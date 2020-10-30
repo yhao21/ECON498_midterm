@@ -29,6 +29,8 @@ when you call `Parsing(folder).parsing_gecko_html()`.
 
 
 # parsing coin html
+
+![scrapping process](https://github.com/yhao21/ECON498_midterm/blob/master/pic/parsing_48.png)
 This function helps you parsing html files from 'coinmktcap'.
 First, it generates the absolute path of folder where the html files are being saved.
 The path is assigned to `self.file_path`.
