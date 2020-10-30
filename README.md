@@ -65,7 +65,7 @@ or
 `sudo python3.8 -m pip install <package name>`
 
 The reason of using 'python' + version to run python in terminal is probably
-because you have installed python with command `sudo altinstall`. 
+because you have installed python with command `sudo make altinstall`. 
 
 
 # How to run the program
