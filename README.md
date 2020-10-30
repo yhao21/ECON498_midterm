@@ -28,7 +28,7 @@ the deeplink data for each cryptocurrency.
 # Installation
 You may need to download this package with command
 
-`git clone https://www.github.com/yhao21/ECON4980_midterm`
+`git clone https://www.github.com/yhao21/ECON498_midterm`
 
 ## Dependency packages
 You may need to have python 3.7 or above. You also need some dependency packages,
@@ -81,7 +81,7 @@ You can customize the program by changing arguments in `MainConsole.py`.
 ## Number of pages to scrape
 You may need to change the arguments in `url_list` in `step 1`
 
-For example, if you only need the first 100 currencies information, which is one page
+For example, if you only need the first 100 currencies information, which is the first page
 , you may need to replace the line of `url_list` with
 ```
 url_list = [(url_coin_base + str(i), url_gecko_base + str(i)) for i in range(1,2)]
@@ -97,8 +97,8 @@ url_list = [(url_coin_base + str(i), url_gecko_base + str(i)) for i in range(2,6
 
 ## Time interval
 You can choose how many hours data to scrape. Note, time interval is with unit of
-15 minutes. It means that the program sleeps for 15 mins after finish each elements
-in `url_list`.
+15 minutes. It means that the program sleeps for 15 mins after downloading all
+URLs in `url_list`. Then re-download them again.
 For example, if you need 30 mins data, you should revise `Scrapping().folder_setup()`
 in `step 1` as the following
 
@@ -109,7 +109,7 @@ Scrapping(url_list, folder_name, 0.5).folder_setup()
 If you need 30 hours data,
 
 ```
-Scrapping(url_list, folder_name, 48).folder_setup()
+Scrapping(url_list, folder_name, 30).folder_setup()
 ```
 
 
@@ -173,9 +173,9 @@ The following information will be saved,
 
 
 # Other Documentations
-[documentation for scrapping_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_scrapping_module.md)
-[documentation for parsing_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_parsing_module.md)
-[documentation for deeplink_parsing.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_deeplink_parsing.md)
+[documentation for scrapping_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_scrapping_module.md)  
+[documentation for parsing_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_parsing_module.md)  
+[documentation for deeplink_parsing.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_deeplink_parsing.md)  
 
 
 
