@@ -47,12 +47,31 @@ Then the function extracts the following information from each html file.
 | marketcap volume | mktcap|
 | currency deeplink | deeplink |
 
-Note, the program will parse the `deeplink` only when `repetition` = 1. Clearly,
+Note, the program will parse the `deeplink` only when `repetition` = 2. Clearly,
 the `deeplink` for each currency will not change except the designer change the 
 source code of this website. Hence, the program only need to parse this for once.
+Note, for any reason, if the html file in the 2nd repetition does not contain
+`deeplink`, then you should manually find a repetition that all five html
+files constain `deeplink`. Then, you assign this repetition to `repetition`.
+
+If you change the repetition here, then you should also change the value of
+`repetition` in `pair_deeplink()` in `scrapping_module.py`
+
+```python
+def pair_deeplink():
+    df = pd.read_csv('CoinMKT_48hrs_data.csv')
+    # change '2' to the repetition number you have chosen
+    coin_df = df[df['repetition'] == 2].iloc[:,-1].values
+
+    df = pd.read_csv('Gecko_48hrs_data.csv')
+    # change '1' to the repetition number you have chosen
+    gecko_df = df[df['repetition'] == 1].iloc[:,-1].values
+
+    return [(coin, gecko) for coin, gecko in zip(coin_df, gecko_df)]
+```
 
 All information will be saved into a csv file `CoinMKT_48hrs_data.csv`. If you open
-it with Excel or other productive softwares, you will get a table like this:
+it with Excel or other productivity softwares, you will get a table like this:
 
 |repetition|rank|name|abbr|url_name|price|24hr_volume|mktcap|deeplink|
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
