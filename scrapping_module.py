@@ -536,7 +536,7 @@ def check_folder():
         folder = 'coin_500deeplink'
         # ('titanswap', 'https://coinmarketcap.com/currencies/titanswap')
         coin_pair = [(item[1], item[-1]) for item in coin_error]
-        start_recoving(folder, coin_pair)
+        start_recovering(folder, coin_pair)
             
     if len(gecko_error) != 0:
         folder = 'gecko_500deeplink'
