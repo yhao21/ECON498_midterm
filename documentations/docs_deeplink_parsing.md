@@ -64,7 +64,44 @@ one parsing template.
 # Error Log mechanism
 
 ![error_log](https://github.com/yhao21/ECON498_midterm/blob/master/pic/error_log.png)
-As discussed above, the website may not contain the require data for particular 
+As discussed above, the website may not contain the required data for particular 
 currency at this time. If so, `save_to_log()` will be invoked. This function trace
 back to `500deeplinks.csv`, find the name of currency that is as same as the one
 with missing data. Save its `name` and `deeplinks` to `Error_Log.csv`.
+
+
+
+### re-download pages in Error Log
+You can re-download pages in `Error_Log.csv` in `step 10`. It will call 
+function  `check_folder()` in `scrapping_module.py`. It will classify URLs
+from two websites, and download pages with `start_recovering()`.
+
+`step 10` will parse all html files again after re-download the error pages.
+If you do not want to parse these files immediately, comment these lines
+in `step 10`.
+
+```python
+
+folder = 'coin_500deeplink'
+ParsingDeepLink(folder).parsing_coin_deeplink()
+folder = 'gecko_500deeplink'
+ParsingDeepLink(folder).parsing_gecko_deeplink()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -484,6 +484,8 @@ def merge_rating_links():
 
 
 
+
+
 def recover_error_deeplink(folder):
     df = pd.read_csv('Error_Log.csv')
     df = df.iloc[:, 1:].values
@@ -520,28 +522,86 @@ def scrapping_error_page(folder, name, url):
     print(one_file)
 
 
+def check_folder():
+    '''
+    Check prepare URLs for recoving
+    (name, url)
+    '''
+
+    error_log = pd.read_csv('Error_Log.csv')
+    coin_error = error_log.loc[error_log['deeplinks'].str.contains('coinmarketcap')].values
+    gecko_error = error_log.loc[error_log['deeplinks'].str.contains('gecko')].values
+    # ajust empty list
+    if len(coin_error) != 0:
+        folder = 'coin_500deeplink'
+        # ('titanswap', 'https://coinmarketcap.com/currencies/titanswap')
+        coin_pair = [(item[1], item[-1]) for item in coin_error]
+        start_recoving(folder, coin_pair)
+            
+    if len(gecko_error) != 0:
+        folder = 'gecko_500deeplink'
+        gecko_pair = [(item[1], item[-1]) for item in gecko_error]
+        start_recovering(folder, gecko_pair)
 
 
 
+def start_recovering(folder, url_list):
+    folder_path = os.path.join(os.getcwd(), folder)
+    total_workload = len(url_list)
+    workload = len(url_list)
+
+    for currency in url_list:
+
+        start_time = time.time()
+
+        fname = currency[0] + '.html'
+        file_path = os.path.join(folder_path, fname)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        url = currency[1]
+        headers = {'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36'}
+
+        r = requests.get(url, headers = headers)
+        html = r.text
+        with open(file_path + '.temp', 'w') as f:
+            f.write(html)
+        os.rename(file_path + '.temp', file_path)
 
 
+        workload -= 1
+        round_time = time.time() - start_time
+        sleep_time = np.random.randint(5,10) + np.random.normal(8,3)
+        if workload == 0:
+            sleep_time = 0
+        remain_workload = workload
+        print('\n\nRecovering [ %s ]' % fname + '-' * 80 + '(%d/%d)' %(total_workload - workload, total_workload))
+        print('\nProgram sleeps for [ %d ] seconds...\n' % sleep_time)
+
+        lte(round_time, sleep_time, remain_workload)
+        print('=' * 130)
+        time.sleep(sleep_time)
+    
 
 
-
-
-
-
-
-
-
+        
 
 
 
 
 
 if __name__ == '__main__':
-    folder = ['coin_500deeplink', 'gecko_500deeplink']
-    recover_error_deeplink(folder)
+    check_folder()
+
+
+
+
+
+
+
+
+
+    #folder = ['coin_500deeplink', 'gecko_500deeplink']
+    #recover_error_deeplink(folder)
 
 
 

@@ -2,8 +2,9 @@ import os, glob
 from scrapping_module import Scrapping, DeepLink, merge_rating_links
 from parsing_module import Parsing
 from scrapping_module import name_extraction as etr
-from scrapping_module import pair_deeplink
+from scrapping_module import pair_deeplink, check_folder
 from deeplink_parsing import ParsingDeepLink
+
 
 
 
@@ -67,23 +68,6 @@ ParsingDeepLink(folder).parsing_gecko_deeplink()
 
 
 
-#==============================================================================
-# Step 5. Pair rating urls and names, scrapping rating deeplink
-#==============================================================================
-#rating_url_list, rating_name_list = merge_rating_links()
-#folder = ['coin_rating_html', 'gecko_rating_html']
-#DeepLink(rating_url_list, folder, rating_name_list, mode = 0).folder_setup()
-#os.rmdir(os.path.join(os.getcwd(), 'gecko_rating_html'))
-
-
-
-
-
-#==============================================================================
-# Step 6. Parsing rating info (have trouble, they are in java scripts)
-#==============================================================================
-#folder = 'coin_rating_html'
-#ParsingDeepLink(folder).parsing_coin_rating()
 
 
 
@@ -98,6 +82,12 @@ ParsingDeepLink(folder).parsing_gecko_deeplink()
 #==============================================================================
 # re-download data from Error_Log.csv
 
+#check_folder()
+#
+#folder = 'coin_500deeplink'
+#ParsingDeepLink(folder).parsing_coin_deeplink()
+#folder = 'gecko_500deeplink'
+#ParsingDeepLink(folder).parsing_gecko_deeplink()
 
 
 
