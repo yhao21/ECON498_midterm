@@ -38,15 +38,14 @@ be saved to `Coin_500Deeplink_Info.csv`.
 | All time low | all_time_low |
 | 7 days high | 7_days_high |
 | 7 days low | 7_days_low |
-| URL for rating page | rating_url |
 
 Note, 'coinmktcap' has two structures for different currencies. Hence, this function
 uses `try/except` format during the parsing process, so that the program can
 automatically select the suitable parsing template.
 
 If the page does NOT contain the required information in the above table, the
-program will invoke the `Error Log` mechanism, and only save `name` and 
-`rating_url` to the csv file.
+program will invoke the `Error Log` mechanism, and only save `name`
+to the csv file.
 
 The program DOES NOT fill in 'No info' or 'None' when data are missing because
 this currency is not useful if the website does not have its data at this time.

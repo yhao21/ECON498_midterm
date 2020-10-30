@@ -170,12 +170,12 @@ The following information will be saved,
 | all time low | all_time_low |
 | 7 days high | 7_days_high |
 | 7 days low | 7_days_low |
-| rating URL | rating_url |
 
 
 # Other Documentations
 [documentation for scrapping_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_scrapping_module.md)
-
+[documentation for parsing_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_parsing_module.md)
+[documentation for deeplink_parsing.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_deeplink_parsing.md)
 
 
 
