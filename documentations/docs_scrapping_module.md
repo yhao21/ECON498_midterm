@@ -25,7 +25,6 @@ number of currencies can be customized)
 
 2. Scrape each currency's deeplink page.
 
-3. Extract URLs for rating pages.
 
 
 # 48hrs data scrapping
@@ -57,10 +56,10 @@ You will receive 192(4 * 48) files for the same page.
 
 ### folder_setup
 This function checks existence for folders saving html files. If there is no 
-such folder, the problem will create a new one with the name in `folder_name`.
-Then, assign the absolute path of those folders to `folder_path`.
+such folder, the program will create a new one with the name in `folder_name`.
+Then, it assigns the absolute path of those folders to `folder_path`.
 
-If folders are not empty, store file names to list, `self.finish_file`. These names
+If folders are not empty, it saves file names to a list, `self.finish_file`. These names
 are used for checking process later.
 
 At the end, call function `check_file_existence`.
@@ -68,7 +67,7 @@ At the end, call function `check_file_existence`.
 ### check_file_existence
 First, delete all `.temp` files in the folder by function `remove_tempfile`.
 
-Second, assign times of repetition to `self.repeat_times`.
+Second, assign repetition to `self.repeat_times`.
 
 `self.repeat_time` = 192, if you need 48 hours data.
 
@@ -114,7 +113,7 @@ Otherwise, it will print out the existence in terminal.
 
 #### About sleep time
 Recall the first for loop extracts tuples out of the list. And each tuple represents
-the nth page from both website, i.e., 
+the nth page from both websites, i.e., 
 
 ```
 [
@@ -125,7 +124,7 @@ the nth page from both website, i.e.,
 ```
 Then the second for loop extracts elements from each tuple. There is no
 sleep time within the second for loop. It means that the program will download
-`first page url from coingecko` right after downloading `first page url from coingecko`.
+`first page url from coingecko` right after downloading `first page url from coinmktcap`.
 This mechanism allows us to obtain the page from both websites almost at
 the same time (There might be 1 seconds delay or even less. It depends on the 
 computational power and internet status of your computer).
@@ -151,6 +150,8 @@ You will receive a formatted message in terminal when the program starts scrappi
 process and after finishing it. Note, the program will not sleep 15 minutes
 after downloading the last page of the entire workload, i.e., the 5th page of 192th 
 repetition.
+
+![scrapping process](https://github.com/yhao21/ECON498_midterm/blob/master/pic/scrapping_48.png)
 
 
 ### start_scrapping
@@ -182,7 +183,7 @@ Scrapping [ coinmkt: page4 ]...
 ```
 
 #### repeats
-This function compute total repetitions, given the `time_interval`. There are 4
+This function computes total repetitions, given the `time_interval`. There are four
 '15 minutes' within an hour. Hence, there will be 48 * 4 = 192 repetitions if you
 set `time_interval` = 192
 
@@ -202,7 +203,7 @@ This function extracts currency names from URL then save names and URLs to
 a csv file `500deeplinks.csv`.
 
 With the same logic as how to extract URL from `url_list`, this function
-work through the extraction process with two for loops. The last part of
+works through the extraction process with two for loops. The last part of
 each URL contains the name of the cryptocurrency. Hence, the program extracts
 the last part using regular expression. Then, save `name` and `deeplinks` as a
 pair to the csv file.
@@ -237,17 +238,6 @@ in pair, with the same format as `url_list`.
 
 
 
-# Merge rating links
-This function is invoked after scrapping and parsing the deeplink.
-Deeplink information from two websites are saved into `Coin_500Deeplink_Info.csv`
-and `Gecko_500Deeplink_Info.csv`. This function extracts currency names and 
-rating URLs, and assigns values to `coin_name`, `coin_url`, `gecko_name`,
-`gecko_url`. Then, it generates and return two lists containing names and rating 
-URLs in pair, i.e.,
-```
-rating_url_list = [(coin_url, gecko_url), (coin_url, gecko_url), ...]
-rating_name_list = [(coin_name, gecko_name), (coin_name, gecko_name), ...]
-```
 
 
 
