@@ -1,0 +1,261 @@
+# Content
+
+- [Blue print](#Blue-print)  
+- [48hrs data scrapping](#48hrs-data-scrapping)  
+    - [folder_setup()](#folder_setup)  
+    - [check_file_existence()](#check_file_existence)  
+        - [About sleep time](#About-sleep-time)  
+    - [start_scrapping()](#start_scrapping)  
+    - [save_html_file()](#save_html_file)  
+    - [Other functions](#Other-functions)  
+        - [output_format()](#output_format)  
+        - [repeats()](#repeats)  
+        - [finish_repeats()](#finish_repeats)  
+- [name_extraction()](#name_extraction)  
+- [Deeplink scrapping](#Deeplink-scrapping)  
+
+
+
+
+# Blue print
+`scrapping_module` is designed with three purposes:
+
+1. Scrape 48 hours data for top 500 cryptocurrencies. (Time interval and
+number of currencies can be customized)
+
+2. Scrape each currency's deeplink page.
+
+3. Extract URLs for rating pages.
+
+
+# 48hrs data scrapping
+The scrapping process for 48hrs data is encapsulated in a class called
+`Scrapping`. You can run this part with
+`Scrapping(url_list, folder_name, time_interval).folder_setup()`.
+
+Three arguments is required:
+
+1. `url_list`: A list contains number of tuples. Each tuple includes 
+the nth page URL from both websites.
+
+```python
+url_list = [(coin_url, gecko_url), (coin_url, gecko_url), (coin_url, gecko_url), ...]
+```
+
+2. `folder_name`: A list contains names of folder saving html files from two 
+websites.
+
+```python
+folder_name = ['coinmktcap_html_file', 'gecko_html_file']
+```
+
+3. `time_interval`: It can be either an integer or a float number.
+Set `time_interval = 48` to download 48 hours data. The program will take a 
+15 minutes break every time after downloading all URLs in `url_list`. Hence,
+the program sends requests to both websites every 15 minutes (4 times in an hour).
+You will receive 192(4 * 48) files for the same page.
+
+### folder_setup
+This function checks existence for folders saving html files. If there is no 
+such folder, the problem will create a new one with the name in `folder_name`.
+Then, assign the absolute path of those folders to `folder_path`.
+
+If folders are not empty, store file names to list, `self.finish_file`. These names
+are used for checking process later.
+
+At the end, call function `check_file_existence`.
+
+### check_file_existence
+First, delete all `.temp` files in the folder by function `remove_tempfile`.
+
+Second, assign times of repetition to `self.repeat_times`.
+
+`self.repeat_time` = 192, if you need 48 hours data.
+
+The program runs 192 times. Each time, it extracts URLs with two for loops.
+
+```python
+for url_order in self.url_list:
+    for web_url in url_order:
+```
+Note, `self.url_list = url_list`. The first for loop extracts each tuple from
+`url_list`, i.e.,
+`url_order` = `(coin_url, gecko_url)`. The second for loop extracts URL in the tuple.
+Hence, `web_url` can be either 'coin_url' or 'gecko_url'.
+
+After that, the program formats the name of html files in the form of
+
+```
+self.file_name = <repetition>_15_<page i>_<timestamp>.html
+```
+
+where `timestamp` is in the form of 'mm-dd-hh-mm-ss'. Let's see an example,
+
+```
+2_15_page1_10-20-23-29-30.html
+```
+
+From this file name we know that this is the first page in the
+second round (data after 15 mins). And this page is obtained on Oct. 20th
+at 11:29pm.
+
+Then you can obtain the path of each file by merging folder path and file name.
+The path is assigned to `self.file_path`.
+
+Further, the program checks the existence of the file by comparing the
+first part of the file name (without time stamp) and the names we have obtained
+in `self.finish_file` from `folder_setup()`. Note, the comparison process ignores
+the time stamp for each file because time stamp is unique for each file. The
+comparison is not useful if it includes the time stamp.
+
+If file does not exist, the program will call `start_scrapping()` downloading
+source code of this html file.
+Otherwise, it will print out the existence in terminal.
+
+#### About sleep time
+Recall the first for loop extracts tuples out of the list. And each tuple represents
+the nth page from both website, i.e., 
+
+```
+[
+(<first page url from coinmktcap>, <first page url from coingecko>),
+(<second page url from coinmktcap>, <second page url from coingecko>),
+(<third page url from coinmktcap>, <third page url from coingecko>)
+]
+```
+Then the second for loop extracts elements from each tuple. There is no
+sleep time within the second for loop. It means that the program will download
+`first page url from coingecko` right after downloading `first page url from coingecko`.
+This mechanism allows us to obtain the page from both websites almost at
+the same time (There might be 1 seconds delay or even less. It depends on the 
+computational power and internet status of your computer).
+
+After scrapping each tuple (each page's URL from both websites),
+the program sleeps for
+about 10 to 20 seconds. This sleep time is a random number generated by the function
+called `sleep_time()`
+
+```python
+def sleep_time(self):
+    return np.random.randint(5,10) + np.random.normal(8,3)
+```
+It returns the sum of two random numbers as `sleep_time`. The program tries to mimic
+the behavior of human-being. Clearly, a human will not download a web page 
+exactly every 10 seconds. It must be a random number.
+
+After downloading all five pages in the `url_list`,
+the program sleeps for 15 minutes.
+Then download these pages again.
+
+You will receive a formatted message in terminal when the program starts scrapping
+process and after finishing it. Note, the program will not sleep 15 minutes
+after downloading the last page of the entire workload, i.e., the 5th page of 192th 
+repetition.
+
+
+### start_scrapping
+This function is invoked if the html file is not existed. The function send a request
+and save the source code of each page to variable `html`. Then write to a local html
+file using function `save_html_file()`.
+
+
+### save_html_file
+The function open a new html file named by `self.file_path` + '.temp'. After writing
+all source code to the file, rename it as `self.file_path`. This mechanism guarantee
+that there's no broken file name by `self.file_path`. The html file is a '.temp' file
+if the program is crashed due to any reason. Hence, when you restart the program,
+it will remove the '.temp' file and re-download this page for you.
+
+
+### Other functions
+Functions below make the scrapping process more reasonable and readable.
+
+#### output_format
+This function formats all 'function-generated' variables in the form of
+`[ <variable> ]` when they are shown up
+as a feedback message in terminal.
+
+Example:
+
+```
+Scrapping [ coinmkt: page4 ]... 
+```
+
+#### repeats
+This function compute total repetitions, given the `time_interval`. There are 4
+'15 minutes' within an hour. Hence, there will be 48 * 4 = 192 repetitions if you
+set `time_interval` = 192
+
+#### finish_repeats
+This function formats the output message to terminal. It transfers numerical
+value to order value, i.e., 1 --> 1st, 2 --> 2nd, etc. Hence, you will see
+this in terminal:
+
+```
+Finish downloading the [ 5th ] 15-min data
+```
+
+
+
+# name_extraction
+This function extracts currency names from URL then save names and URLs to
+a csv file `500deeplinks.csv`.
+
+With the same logic as how to extract URL from `url_list`, this function
+work through the extraction process with two for loops. The last part of
+each URL contains the name of the cryptocurrency. Hence, the program extracts
+the last part using regular expression. Then, save `name` and `deeplinks` as a
+pair to the csv file.
+
+
+# Deeplink scrapping
+The scrapping process for deeplink is encapsulated in a class called `DeepLink`.
+It works in the same way as `Scrapping`. However, the program downloads deeplink
+only once. There is no need to download the deeplinks every 15 minutes because
+data in deeplinks do not change every seconds.
+
+Another difference is that you can customized the method of scrapping process by
+setting different values for `mode` when you call `DeepLink()`.
+
+```
+mode = 0 ------> using 'requests'
+mode = 1 ------> using 'selenium'
+```
+
+Selenium can help you scrapping websites written with Asynchronous technique. Here
+is an example of using selenium method:
+
+```python
+DeepLink(deeplink_list, deeplink_folder, file_names, mode = 1).folder_setup()
+```
+
+`deeplink_list` is in the same format as `url_list`.  
+`deeplink_folder` is in the same format as `folder_name` when you call `Scrapping`.
+You can obtain `file_names` from `name_extraction()`. This function returns name
+in pair, with the same format as `url_list`.
+
+
+
+
+# Merge rating links
+This function is invoked after scrapping and parsing the deeplink.
+Deeplink information from two websites are saved into `Coin_500Deeplink_Info.csv`
+and `Gecko_500Deeplink_Info.csv`. This function extracts currency names and 
+rating URLs, and assigns values to `coin_name`, `coin_url`, `gecko_name`,
+`gecko_url`. Then, it generates and return two lists containing names and rating 
+URLs in pair, i.e.,
+```
+rating_url_list = [(coin_url, gecko_url), (coin_url, gecko_url), ...]
+rating_name_list = [(coin_name, gecko_name), (coin_name, gecko_name), ...]
+```
+
+
+
+
+
+
+
+
+
+
+
