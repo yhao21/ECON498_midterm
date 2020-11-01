@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
 
 
 
@@ -106,12 +108,24 @@ class DataClean():
                 #print(self.coin_df[self.coin_df['repetition'] == row[1]])
                 #print('len: coin_df :', len(coin_df))
 
-        print(len(self.coin_df))
-        print(len(self.gecko_df))
+        #print(len(self.coin_df))
+        #print(len(self.gecko_df))
         return self.coin_df, self.gecko_df
 
 
 class ComparableData():
+    '''
+    This class return a list of abbr which cointains the abbr of all comparable currencies.
+    A comparable currency should appears in 1) all repetitions and 2) dataset from both
+    websites.
+
+    An example:
+
+    data_comparable = ComparableData(coin_df, gecko_df, 4).grouping()
+    
+    Remember, data_comparable is a list of abbr.
+    '''
+
     def __init__(self, df_base, df_compare, compare_column):
         self.df_base = df_base
         self.df_compare = df_compare
@@ -200,8 +214,80 @@ class ComparableData():
         
 
 
+class Statistics():
 
+    def __init__(self, data_list):
+        self.data = data_list
+        self.stat_list = []
+
+    def trend_statistics(self):
+        mean = round(np.mean(self.data), 4)
+        std = round(np.std(self.data), 4)
+        max_val = round(np.max(self.data), 4)
+        min_val = round(np.min(self.data), 4)
+        data_range = round(max_val - min_val, 4)
+
+        self.stat_list = [mean, std, data_range]
+
+
+        return self.stat_list
+
+
+
+class GraphDiff():
+    def __init__(self, coin_df, gecko_df, trend_pic_name, HTH_pic_name, item):
+        self.coin = coin_df
+        self.gecko = gecko_df
+        self.trend_name = trend_pic_name
+        self.HTH_name = HTH_pic_name
+        self.item = item
+        self.col = None
+        self.which_item()
+
+    def which_item(self):
+        if self.item == 'price':
+            self.col = 6
+        elif self.item == 'vol':
+            self.col = 7
+        elif self.item == 'mktcap':
+            self.col = 8
+
+        self.graph_coinVSgecko()
+
+
+    def graph_coinVSgecko(self):
+        '''
+        Generate two graph for a currency:
+        1. plot trend
+        '''
+        # clean data for coin and gecko, dataframe()
+        coin_clean, gecko_clean = DataClean(self.coin, self.gecko).clean_rows()
+        x_axis = [i for i in range(len(coin_clean))]
     
+        coin_price = coin_clean.iloc[:,self.col].values
+        gecko_price = gecko_clean.iloc[:,self.col].values
+    
+        plt.plot(x_axis, coin_price, c = 'red')
+        plt.plot(x_axis, gecko_price, c = 'blue')
+        plt.xlabel('repetition/time_period(nth 15 mins)')
+        plt.ylabel(self.item)
+        plt.title(self.trend_name)
+        plt.savefig(self.trend_name + '.png')
+        # Initialize matplotlib after plotting.
+        # Avoid overlapping
+        plt.clf()
+        
+        
+        ### scatter plot: bitcoin data (coinmktcap vs gecko)
+        ### If data are same, it suppose to be a straight line.
+        plt.scatter(coin_price, gecko_price)
+        plt.xlabel('coinmktcap_' + self.item)
+        plt.ylabel('coingecko_' + self.item)
+        plt.title(self.HTH_name)
+        plt.savefig(self.HTH_name + '.png')
+        plt.clf()
+
+
 
 
 

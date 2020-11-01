@@ -14,7 +14,6 @@ from deeplink_parsing import ParsingDeepLink
 
 #url_coin_base = 'https://coinmarketcap.com/' 
 #url_gecko_base = 'https://www.coingecko.com/en?page=' 
-##url_list = [(url_coin_base + str(i), url_gecko_base + str(i)) for i in range(1,2)]
 #url_list = [(url_coin_base + str(i), url_gecko_base + str(i)) for i in range(1,6)]
 #folder_name = ['coinmktcap_html_file', 'gecko_html_file']
 #Scrapping(url_list, folder_name, 48).folder_setup()
