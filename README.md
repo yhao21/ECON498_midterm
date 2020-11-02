@@ -11,6 +11,7 @@
     - [Step 2 Parsing trend data and deeplink](#Step-2-Parsing-trend-data-and-deeplink)
     - [Step 3 Scrapping deeplink for each currency](#Step-3-Scrapping-deeplink-for-each-currency)
     - [Step 4 Parsing deeplink information](#Step-4-Parsing-deeplink-information)
+- [csv files](#csv-files)
 - [Other Documentations](#Other-Documentations)
 
 
@@ -187,10 +188,40 @@ The following information will be saved,
 | 7 days low | 7_days_low |
 
 
+# csv files
+CSV files contain raw data are list below
+
+| file name | description |
+| :-------: | :---------: |
+| CoinMKT_48hrs_data.csv | 48hrs data from coinmktcap |
+| Gecko_48hrs_data.csv | 48hrs data from coingecko |
+| Coin_500Deeplink_Info.csv | deeplink info from coinmktcap |
+| Gecko_500Deeplink_Info.csv | deeplink info from coingecko |
+
+CSV files for data analysis are in directory `data_analysis`.
+
+| file name | description |
+| :-------: | :---------: |
+| Price_Comparable_statistics.csv | Comparison for price info |
+| Volume_Comparable_statistics.csv | Comparison for volume info |
+| Mktcap_Comparable_statistics.csv | Comparison for mktcap info |
+
+
+CSV files contain supplement information are list below
+
+| file name | description |
+| :-------: | :---------: |
+| 500deeplinks.csv | 500 deeplinks from both websites (1000 in total) |
+| Error_Log.csv | currencies cannot be parsed by deeplink_parsing |
+| coin_logo.csv | URLs for currency logo from coinmktcap |
+| gecko_logo.csv | URLs for currency logo from coingecko |
+
+
 # Other Documentations
 [documentation for scrapping_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_scrapping_module.md)  
 [documentation for parsing_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_parsing_module.md)  
 [documentation for deeplink_parsing.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_deeplink_parsing.md)  
+[documentation for analysis_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_analysis_module.md)
 
 
 
