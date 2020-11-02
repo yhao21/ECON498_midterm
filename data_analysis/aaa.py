@@ -1,6 +1,7 @@
-import numpy as np
+import pandas as pd
 
 
+df = pd.read_csv('CoinMKT_48hrs_data.csv')
 
-a = [1,2,3,4,5]
-print(np.mean(a))
+df = df[df['abbr'] == 'XRP'].values
+print(len(df))

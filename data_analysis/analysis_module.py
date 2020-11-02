@@ -114,6 +114,7 @@ class DataClean():
         return self.coin_df, self.gecko_df
 
 
+
 class ComparableData():
     '''
     This class return a list of abbr which cointains the abbr of all comparable currencies.
@@ -144,6 +145,7 @@ class ComparableData():
         max_rep = max(rep_list)
         min_rep = min(rep_list)
 
+
         # get abbr from df with repetition == 2
         # len = 500
         base_list = list(self.df_base[self.df_base['repetition'] == 2].iloc[:, self.col].values) 
@@ -160,6 +162,7 @@ class ComparableData():
             self.matching(self.data_backup, comp_list)
 
         coin_data = self.data
+
 
         self.data = []
         base_list = list(self.df_compare[self.df_compare['repetition'] == 2].iloc[:, self.col].values) 
@@ -211,7 +214,7 @@ class ComparableData():
         Use for loop get rep == i, i = 1, 2, 3,... 192, from coin and gecko df.
         '''
         
-        return df[df['repetition'] == rep].iloc[:, self.col].values
+        return list(df[df['repetition'] == rep].iloc[:, self.col].values) 
         
 
 
@@ -293,6 +296,77 @@ class GraphDiff():
 
 
 
+class Compare_192():
+
+    def __init__(self, coin_df, gecko_df, data_comparable, item):
+        self.coin = coin_df
+        self.gecko = gecko_df
+        self.comp = data_comparable
+        self.df_coin = pd.DataFrame()
+        self.df_gecko = pd.DataFrame()
+        self.item = item
+        self.col = None
+        self.check_item()
+
+    def check_item(self):
+        if self.item == 'price':
+            self.col = 6
+        if self.item == 'vol':
+            self.col = 7
+        if self.item == 'mktcap':
+            self.col = 8
+
+
+    def get_statistics(self):
+
+        ### statistics in coinmktcap's data
+        ## item = one currency, item_df = this currency's trend data
+        for item in self.comp:
+            coin_item_df = self.coin[self.coin['abbr'] == item]
+            gecko_item_df = self.gecko[self.gecko['abbr'] == item]
+            # only need currencies with 192 repetitions
+
+            if coin_item_df.shape[0] == 192:
+                # can be price, vol, mktcap, depends on 'item'
+                item_info = coin_item_df.iloc[:, self.col].values
+                ## [mean, std, data_range]
+                item_statistics = Statistics(item_info).trend_statistics()
+
+                self.df_coin = self.df_coin.append({
+                    'coin_name':item,
+                    'coin_mean':item_statistics[0],
+                    'coin_std':item_statistics[1],
+                    'coin_range':item_statistics[2],
+                    }, ignore_index = True)
+
+                item_info = gecko_item_df.iloc[:, self.col].values
+                item_statistics = Statistics(item_info).trend_statistics()
+
+                self.df_gecko = self.df_gecko.append({
+                    'gecko_name':item,
+                    'gecko_mean':item_statistics[0],
+                    'gecko_std':item_statistics[1],
+                    'gecko_range':item_statistics[2],
+                    }, ignore_index = True)
+
+        df = pd.concat([self.df_coin, self.df_gecko], axis = 1)
+        df = df.drop(columns = 'gecko_name')
+        df['mean_diff'] = (df['gecko_mean'] - df['coin_mean'])/df['coin_mean']
+        df['std_diff'] = (df['gecko_std'] - df['coin_std'])/df['coin_std']
+        df['range_diff'] = (df['gecko_range'] - df['coin_range'])/df['coin_range']
+
+
+
+
+
+        order = ['coin_name', 'coin_mean', 'gecko_mean', 'mean_diff', 'coin_std', 'gecko_std', 'std_diff', 'coin_range', 'gecko_range', 'range_diff']
+        df = df[order]
+        #print(df)
+
+        return df
+
+
+
 
 
 if __name__ == '__main__':
@@ -300,12 +374,13 @@ if __name__ == '__main__':
     coin_df = pd.read_csv('CoinMKT_48hrs_data.csv')
     gecko_df = pd.read_csv('Gecko_48hrs_data.csv')
     
-    # coin_rep2 = coin_df with repetition == 2
-    # shape = (500, 10)
-    #coin_rep2 = coin_df[coin_df['repetition'] == 2]
-    #print(coin_rep2.iloc[:, 4].values)
-
     data_comparable = ComparableData(coin_df, gecko_df, 4).grouping()
-    print('len data_comparable: ', len(data_comparable))
-    print(data_comparable)
+    comp_statistics = Compare_192(coin_df, gecko_df, data_comparable, 'price').get_statistics()
+    print(comp_statistics)
+
+
+
+
+    #print('len data_comparable: ', len(data_comparable))
+    #print(data_comparable)
 
