@@ -81,8 +81,9 @@ from deeplink_parsing import ParsingDeepLink
 #==============================================================================
 # Step 9. Logo img scrapping
 #==============================================================================
-csv_files = ['coin_logo.csv', 'gecko_logo.csv']
-logo_scrapping(csv_files)
+#csv_files = ['coin_logo.csv', 'gecko_logo.csv']
+#logo_scrapping(csv_files)
+
 
 
 

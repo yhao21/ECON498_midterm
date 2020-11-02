@@ -73,6 +73,21 @@ You may find the file `MainConsole.py` in the root directory. Run this file in
 terminal. This program will automatically do all scrapping and parsing process
 for you.
 
+If you want to do the scrapping and parsing separately,
+here are the instructions.
+
+1. 48hrs data scrapping: run `step 1`.
+
+2. Parse 48hrs data: run `step 2`.
+
+3. Deeplink scrapping: run `step 2`, then `step 3`.
+
+4. Parse deeplink: run `step 4`.
+
+5. Logo image scrapping: run `step 8`, then `step 9`.
+
+6. Deeplink page recovering: run `step 10`.
+
 
 # Configuration
 You can customize the program by changing arguments in `MainConsole.py`.

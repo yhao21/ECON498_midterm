@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+import os
 
 
 
@@ -267,12 +268,15 @@ class GraphDiff():
         coin_price = coin_clean.iloc[:,self.col].values
         gecko_price = gecko_clean.iloc[:,self.col].values
     
+        if not os.path.exists('figures'):
+            os.mkdir('figures')
+
         plt.plot(x_axis, coin_price, c = 'red')
         plt.plot(x_axis, gecko_price, c = 'blue')
         plt.xlabel('repetition/time_period(nth 15 mins)')
         plt.ylabel(self.item)
         plt.title(self.trend_name)
-        plt.savefig(self.trend_name + '.png')
+        plt.savefig(os.path.join('figures', self.trend_name + '.png'))
         # Initialize matplotlib after plotting.
         # Avoid overlapping
         plt.clf()
@@ -284,7 +288,7 @@ class GraphDiff():
         plt.xlabel('coinmktcap_' + self.item)
         plt.ylabel('coingecko_' + self.item)
         plt.title(self.HTH_name)
-        plt.savefig(self.HTH_name + '.png')
+        plt.savefig(os.path.join('figures', self.HTH_name + '.png'))
         plt.clf()
 
 
