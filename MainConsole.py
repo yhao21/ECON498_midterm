@@ -2,7 +2,8 @@ import os, glob
 from scrapping_module import Scrapping, DeepLink, merge_rating_links
 from parsing_module import Parsing
 from scrapping_module import name_extraction as etr
-from scrapping_module import pair_deeplink, check_folder
+from scrapping_module import pair_deeplink, check_folder, save_logo_url
+from scrapping_module import logo_scrapping
 from deeplink_parsing import ParsingDeepLink
 
 
@@ -59,19 +60,29 @@ from deeplink_parsing import ParsingDeepLink
 #==============================================================================
 # Step 4. Parsing deeplinks (!!!! Need to add another parsing structure in coinmktcap deeplink)
 #==============================================================================
-folder = 'coin_500deeplink'
-ParsingDeepLink(folder).parsing_coin_deeplink()
-folder = 'gecko_500deeplink'
-ParsingDeepLink(folder).parsing_gecko_deeplink()
+#folder = 'coin_500deeplink'
+#ParsingDeepLink(folder).parsing_coin_deeplink()
+#folder = 'gecko_500deeplink'
+#ParsingDeepLink(folder).parsing_gecko_deeplink()
 
 
 
 
 
 
+#==============================================================================
+# Step 8. Parse logo img
+#==============================================================================
+#folder = ['coin_500deeplink', 'gecko_500deeplink']
+#save_logo_url(folder)
 
 
 
+#==============================================================================
+# Step 9. Logo img scrapping
+#==============================================================================
+csv_files = ['coin_logo.csv', 'gecko_logo.csv']
+logo_scrapping(csv_files)
 
 
 

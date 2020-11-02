@@ -3,6 +3,7 @@ import pandas as pd
 import os, requests, time, glob, re, datetime
 from time_countdown import workload_time_left as lte
 from selenium import webdriver
+from bs4 import BeautifulSoup
 
 
 
@@ -583,30 +584,127 @@ def start_recovering(folder, url_list):
     
 
 
-        
+
+
+def save_logo_url(folders):
+
+    df1 = pd.DataFrame()
+    df2 = pd.DataFrame()
+
+    for folder in folders:
+        file_path = os.path.join(os.getcwd(), folder)
+        for one_file in glob.glob(os.path.join(file_path, '*.html')):
+            # fname = coin_name
+            fname = os.path.basename(one_file).replace('.html', '')
+            with open(one_file, 'r') as f:
+                html = f.read()
+
+            soup = BeautifulSoup(html, 'html.parser')
+            if folder == 'coin_500deeplink':
+                img_url = soup.find('div', {'class':'cmc-details-panel-header__name'}).find('img')['src']
+                df1 = df1.append({
+                    'name':fname,
+                    'img_url':img_url,
+                    }, ignore_index = True)
+                
+                print('\nParsing [ coinmktcap: ' + fname + ' ]')
+
+            elif folder == 'gecko_500deeplink':
+                img_url = soup.find('div', {'class':'col-lg-7 col-md-7 d-flex justify-content-center flex-md-row align-middle align-items-center justify-content-md-start p-0 m-0'})\
+                        .find('img')['src']
+                df2 = df2.append({
+                    'name':fname,
+                    'img_url':img_url,
+                    }, ignore_index = True)
+
+                print('\nParsing [ gecko: ' + fname + ' ]')
+
+    order = ['name', 'img_url']
+    df1 = df1[order]
+    df2 = df2[order]
+    df1.to_csv('coin_logo.csv')
+    df2.to_csv('gecko_logo.csv')
+
+            
+def logo_scrapping(csv_files):
+    coin_df = pd.read_csv(csv_files[0])
+    gecko_df = pd.read_csv(csv_files[1])
+
+    coin_url = coin_df.iloc[:, 2].values
+    gecko_url = gecko_df.iloc[:, 2].values
+
+    url_list = [(coin, gecko) for coin, gecko in zip(coin_url, gecko_url)]
+    headers = {'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36'}
+    sleep_mode = True
+
+    if not os.path.exists(os.path.join(os.getcwd(), 'coin_img')):
+        os.mkdir('coin_img')
+    if not os.path.exists(os.path.join(os.getcwd(), 'gecko_img')):
+        os.mkdir('gecko_img')
+
+    folder = ['coin_img', 'gecko_img']
+    total_workload = len(url_list)
+    workload = len(url_list)
+
+    for url_tuple in url_list:
+        for url in url_tuple:
+            start_time = time.time()
+            which_folder = url_tuple.index(url)
+            fname = str(url_list.index(url_tuple)) + '.png'
+            file_path = os.path.join(folder[which_folder], fname)
+
+            if not os.path.exists(file_path):
+                print('\nScrapping [ ' + fname + ' ]...')
+                
+                r = requests.get(url, headers = headers)
+                content = r.content
+                with open(file_path + '.temp', 'wb') as f:
+                    f.write(content)
+                os.rename(file_path + '.temp', file_path)
+
+                print('    ----> Finish...')
+            else:
+                print('\nFile [ ' + fname + ' ] already exists....')
+                sleep_mode = False
+
+        workload -= 1
+        round_time = time.time() - start_time
+        sleep_time = np.random.randint(8,10) + np.random.normal(4,2)
+        lte(round_time, sleep_time, workload)
+
+        if workload == 0:
+            sleep_mode = False
+        if sleep_mode:
+            print('\nProgram sleeps for [ ' + str(sleep_time) + ' ] seconds...'\
+                    + '.' * 70 + '(%d/%d)\n' % (total_workload - workload, total_workload))
+            time.sleep(sleep_time)
+        sleep_mode = True
+    
+    print('Done!!!!')
+
+
+
+            
+    
+
+
 
 
 
 
 
 if __name__ == '__main__':
-    check_folder()
+    pass
 
 
 
 
-
-
-
-
+    #check_folder()
 
     #folder = ['coin_500deeplink', 'gecko_500deeplink']
     #recover_error_deeplink(folder)
 
-
-
     #merge_rating_links()
-
 
     #deeplink_list = [('https://coinmarketcap.com/currencies/bitcoin','https://www.coingecko.com/en/coins/bitcoin'),('https://coinmarketcap.com/currencies/ethereum','https://www.coingecko.com/en/coins/ethereum'),('https://coinmarketcap.com/currencies/tether','https://www.coingecko.com/en/coins/tether')]
     #
@@ -615,37 +713,8 @@ if __name__ == '__main__':
 
     #DeepLink(deeplink_list, deeplink_folder, file_names).folder_setup()
 
-
-
-
     #url_coin_base = 'https://coinmarketcap.com/' 
     #url_gecko_base = 'https://www.coingecko.com/en?page=' 
     #url_list = [(url_coin_base + str(i), url_gecko_base + str(i)) for i in range(1,6)]
     #folder_name = ['coinmktcap_html_file', 'gecko_html_file']
     #Scrapping(url_list, folder_name, 1).folder_setup()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

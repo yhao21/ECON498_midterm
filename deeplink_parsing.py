@@ -131,7 +131,7 @@ class ParsingDeepLink():
 
         order = ['name','rank','circulating_supply', 'all_time_high', 'all_time_low', '7_days_high', '7_days_low']
         self.df = self.df[order]
-        self.df.to_csv(self.coin_df_name)
+        #self.df.to_csv(self.coin_df_name)
         print(self.df)
 
 
