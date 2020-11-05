@@ -8,11 +8,12 @@
     - [Time interval](#Time-interval)  
 - [Functionality](#Functionality)  
     - [Step 1 Scrapping 48hrs data](#Step-1-Scrapping-48hrs-data)  
-    - [Step 2 Parsing trend data and deeplink](#Step-2-Parsing-trend-data-and-deeplink)
-    - [Step 3 Scrapping deeplink for each currency](#Step-3-Scrapping-deeplink-for-each-currency)
-    - [Step 4 Parsing deeplink information](#Step-4-Parsing-deeplink-information)
-- [csv files](#csv-files)
-- [Other Documentations](#Other-Documentations)
+    - [Step 2 Parsing trend data and deeplink](#Step-2-Parsing-trend-data-and-deeplink)  
+    - [Step 3 Scrapping deeplink for each currency](#Step-3-Scrapping-deeplink-for-each-currency)  
+    - [Step 4 Parsing deeplink information](#Step-4-Parsing-deeplink-information)  
+- [csv files](#csv-files)  
+- [Other Documentations](#Other-Documentations)  
+- [Data Analysis](#Interpretation)  
 
 
 
@@ -224,5 +225,6 @@ CSV files contain supplement information are list below
 [documentation for analysis_module.py](https://github.com/yhao21/ECON498_midterm/blob/master/documentations/docs_analysis_module.md)
 
 
-
+# Interpretation
+To find data analysis file, click [here](https://github.com/yhao21/ECON498_midterm/blob/master/data_analysis/INTERPRETATION.md#Some-Interpretations)
 
