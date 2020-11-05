@@ -17,6 +17,8 @@ class DataClean():
         self.mark = mark
         self.delete_rows = []
 
+
+
     def get_repetition(self):
         '''
         This function sort df based on self.mark, i.e., repetition by default
@@ -30,6 +32,7 @@ class DataClean():
         self.coin_rep = list(self.coin_df.iloc[:, 1].values)
         self.gecko_rep = list(self.gecko_df.iloc[:, 1].values)
         #print(self.coin_rep)
+
 
 
     def remove_rows(self):
@@ -47,6 +50,7 @@ class DataClean():
             if not item in self.coin_rep:
                 self.delete_rows.append(('gecko', item))
         #print(self.delete_rows)
+
 
 
     def clean_rows(self):
@@ -115,6 +119,7 @@ class DataClean():
 
 
 
+
 class ComparableData():
     '''
     This class return a list of abbr which cointains the abbr of all comparable currencies.
@@ -135,6 +140,7 @@ class ComparableData():
         self.col = compare_column
         self.data = []
         self.data_backup = None
+
 
 
     def grouping(self):
@@ -206,6 +212,7 @@ class ComparableData():
                 self.data.append(item)
 
 
+
     def next_repetition(self, df, rep):
         '''
         Return new dataframe with repetition == rep in df
@@ -223,6 +230,8 @@ class Statistics():
     def __init__(self, data_list):
         self.data = data_list
         self.stat_list = []
+
+
 
     def trend_statistics(self):
         mean = round(np.mean(self.data), 4)
@@ -248,6 +257,8 @@ class GraphDiff():
         self.col = None
         self.which_item()
 
+
+
     def which_item(self):
         if self.item == 'price':
             self.col = 6
@@ -257,6 +268,7 @@ class GraphDiff():
             self.col = 8
 
         self.graph_coinVSgecko()
+
 
 
     def graph_coinVSgecko(self):
@@ -307,6 +319,7 @@ class Compare_192():
         self.item = item
         self.col = None
         self.check_item()
+
 
     def check_item(self):
         if self.item == 'price':

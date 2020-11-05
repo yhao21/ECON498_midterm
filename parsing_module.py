@@ -241,9 +241,6 @@ if __name__ == '__main__':
     folder = 'gecko_html_file'
     Parsing(folder).parsing_gecko_html()
 
-    deeplink_list = [(coin, gecko) for coin, gecko in zip(coinmkt_parse_and_deeplink, gecko_parse_and_deeplink)]
-    print(deeplink_list)
-    print(len(deeplink_list))
 
 
 

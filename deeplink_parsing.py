@@ -20,6 +20,7 @@ class ParsingDeepLink():
         self.gecko_df_name = 'Gecko_500Deeplink_Info.csv'
 
 
+
     def init_file(self):
         '''
         Locate html folder to parse.
@@ -260,7 +261,6 @@ class ParsingDeepLink():
         order = ['name', 'deeplinks']
         self.error_df = self.error_df[order]
         self.error_df.to_csv(self.log_name + '.csv')
-
 
 
 

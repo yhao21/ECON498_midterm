@@ -76,7 +76,6 @@ class Scrapping():
 
     
     
-
     def check_file_existence(self):
         '''
         Check the existence of target html file.
@@ -184,6 +183,7 @@ class Scrapping():
         print(' ' * 4 + '----> Finish...')
 
 
+
     def save_html_file(self, content):
         '''
         save source code to a html file
@@ -239,6 +239,9 @@ class Scrapping():
 
 
 
+
+
+
 def pair_deeplink():
     df = pd.read_csv('CoinMKT_48hrs_data.csv')
     coin_df = df[df['repetition'] == 2].iloc[:,-1].values
@@ -247,8 +250,6 @@ def pair_deeplink():
     gecko_df = df[df['repetition'] == 1].iloc[:,-1].values
 
     return [(coin, gecko) for coin, gecko in zip(coin_df, gecko_df)]
-
-
 
 
 
@@ -423,7 +424,6 @@ class DeepLink():
 
 
 
-
     def save_html_file(self, html):
         '''
         Save souce code to html file
@@ -451,6 +451,7 @@ class DeepLink():
         format output need to print
         '''
         return ' [ ' + str(item) + ' ] '
+
 
 
 
@@ -514,6 +515,7 @@ def recover_error_deeplink(folder):
 
         
 
+
 def scrapping_error_page(folder, name, url):
     folder_path = os.path.join(os.getcwd(), folder)
     # test
@@ -521,6 +523,7 @@ def scrapping_error_page(folder, name, url):
     # uncommon the line below when you run without testing
     #os.remove(one_file)
     print(one_file)
+
 
 
 def check_folder():
@@ -624,6 +627,8 @@ def save_logo_url(folders):
     df2 = df2[order]
     df1.to_csv('coin_logo.csv')
     df2.to_csv('gecko_logo.csv')
+
+
 
             
 def logo_scrapping(csv_files):
