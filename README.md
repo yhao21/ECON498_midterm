@@ -190,7 +190,7 @@ The following information will be saved,
 
 
 # csv files
-CSV files contain raw data are list below
+CSV files containing raw data are list below
 
 | file name | description |
 | :-------: | :---------: |
@@ -208,7 +208,7 @@ CSV files for data analysis are in directory `data_analysis`.
 | Mktcap_Comparable_statistics.csv | Comparison for mktcap info |
 
 
-CSV files contain supplement information are list below
+CSV files containing supplement information are list below
 
 | file name | description |
 | :-------: | :---------: |
